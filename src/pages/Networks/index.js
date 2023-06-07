@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import './style.css'
 
 import { Header } from '../../components/Header'
@@ -13,12 +13,28 @@ import {
     getDoc,
 } from 'firebase/firestore'
 
+import { toast } from "react-toastify"
+
 export default function Networks () {
     const [facebook, setFacebook] = useState("")
     const [instagram, setInstagram] = useState("")
     const [youtube, setYoutube] = useState("")
 
-     
+    useEffect(() => {
+        function loadLinks() {
+            const docRef = doc(db, "social", "link")
+            getDoc(docRef)
+            .then( (snapshot) => {
+                
+                if(snapshot.data() !== undefined){
+                    setFacebook(snapshot.data().facebook)
+                    setInstagram(snapshot.data().instagram)
+                    setYoutube(snapshot.data().Youtube)
+                }
+            })
+            
+        }
+    }, [])     
     
     function handleSave(e){
         e.preventDefault();
@@ -30,9 +46,11 @@ export default function Networks () {
         })
         .then(() => {
             console.log("Urls salvas com sucesso!")
+            toast.sucess("salvo com sucesso ")
         })
         .catch((error) => {
             console.log("ERRO AO SALVAR" + error)
+            toast.error("erro ao salvar seus links")
         })
     }
 

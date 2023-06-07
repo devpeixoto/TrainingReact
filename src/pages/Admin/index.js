@@ -65,6 +65,7 @@ export default function Admin(){
             return;
         }
         addDoc(collection(db, "links"), { 
+            name: nameInput,
             url: urlInput,
             bg: backgroundColorInput,
             color: textColorInput,
